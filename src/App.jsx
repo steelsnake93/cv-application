@@ -1,10 +1,11 @@
+import GeneralInfo from './components/GeneralInfo';
 
-function App() {
+export default function App() {
 
   return (
-    <>
-    </>
+    <div className="App">
+      <h1>My CV Application</h1>
+      <GeneralInfo />
+    </div>
   )
 }
-
-export default App
