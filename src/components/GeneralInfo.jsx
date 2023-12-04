@@ -51,11 +51,11 @@ export default function GeneralInfo() {
     // Component JSX
     return (
         <div>
-            <h4>YOUR PERSONAL INFO</h4>
+            <h3>Personal Details</h3>
             <form onSubmit={handleSubmit}>
                 {/* Name input field */}
                 <div>
-                    <label htmlFor="name">Full Name:</label>
+                    <label htmlFor="name">Full Name</label>
                     <input
                         type="text"
                         name="name"
@@ -67,7 +67,7 @@ export default function GeneralInfo() {
                 </div>
                 {/* Email input field */}
                 <div>
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="email">Email</label>
                     <input
                         type="email"
                         name="email"
@@ -80,7 +80,7 @@ export default function GeneralInfo() {
                 </div>
                 {/* Phone number input field */}
                 <div>
-                    <label htmlFor="phone">Phone Number:</label>
+                    <label htmlFor="phone">Phone Number</label>
                     <input
                         type="tel"
                         name="phone"
@@ -93,7 +93,7 @@ export default function GeneralInfo() {
                 </div>
                 {/* Address input field */}
                 <div>
-                    <label htmlFor="address">Location:</label>
+                    <label htmlFor="address">Location</label>
                     <input
                         type="text"
                         name="address"
@@ -106,7 +106,7 @@ export default function GeneralInfo() {
                 </div>
                 {/* Link input field */}
                 <div>
-                    <label htmlFor="link">Link:</label>
+                    <label htmlFor="link">Link</label>
                     <input
                         type="text"
                         name="link"
@@ -123,11 +123,11 @@ export default function GeneralInfo() {
             {submittedInfo && (
                 <div>
                     <h3>Submitted Information</h3>
-                    <p>Name: {submittedInfo.name}</p>
-                    <p>Email: {submittedInfo.email}</p>
-                    <p>Phone: {submittedInfo.phone}</p>
-                    <p>Address: {submittedInfo.address}</p>
-                    <p>Link:
+                    <p>Name {submittedInfo.name}</p>
+                    <p>Email {submittedInfo.email}</p>
+                    <p>Phone {submittedInfo.phone}</p>
+                    <p>Address {submittedInfo.address}</p>
+                    <p>Link
                         <a
                             href={submittedInfo.link.includes('http://') || submittedInfo.link.includes('https://') ?
                                 submittedInfo.link :

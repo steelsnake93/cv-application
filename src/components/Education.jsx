@@ -1,14 +1,14 @@
 import { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import CustomDatePicker from "./CustomDatePicker";
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
 
-// Define the Education component
+// Education Component
 export default function Education() {
-    // State for storing multiple education entries
+    // State to store multiple education entries
     const [educationEntries, setEducationEntries] = useState([]);
-    // State for storing form data for a new entry
+
+    // State to store data for a new entry
     const [newEntry, setNewEntry] = useState({
         id: uuidv4(),
         schoolName: "",
@@ -16,28 +16,17 @@ export default function Education() {
         degree: "",
         major: "",
         startDate: new Date(),
-        endDate: new Date(),
+        endDate: "",
         isCurrent: false
     });
 
-    // Handle changes in start date
+    // Function handlers for date change
     const handleStartDateChange = (date) => {
         setNewEntry({ ...newEntry, startDate: date });
     };
 
-    // Handle changes in end date
     const handleEndDateChange = (date) => {
         setNewEntry({ ...newEntry, endDate: date });
-    };
-
-    // Handle changes in current study checkbox
-    const handleCurrentStudyChange = (e) => {
-        const isCurrentlyStudying = e.target.checked;
-        setNewEntry({
-            ...newEntry,
-            isCurrent: isCurrentlyStudying,
-            endDate: isCurrentlyStudying ? new Date() : newEntry.endDate
-        });
     };
 
     // Handle input changes and update the state for the new entry
@@ -48,8 +37,11 @@ export default function Education() {
     // Handle form submission to add a new education entry
     const handleSubmit = (e) => {
         e.preventDefault();
-        setEducationEntries([...educationEntries, newEntry]);
-        // Reset the new entry form after submission
+        const entryToAdd = {
+            ...newEntry,
+            endDate: newEntry.endDate === '' ? null : newEntry.endDate
+        };
+        setEducationEntries([...educationEntries, entryToAdd]);
         setNewEntry({
             id: uuidv4(),
             schoolName: "",
@@ -57,23 +49,22 @@ export default function Education() {
             degree: "",
             major: "",
             startDate: new Date(),
-            endDate: new Date(),
+            endDate: "",
             isCurrent: false
         });
     };
 
-    // Function to remove the specific school from the list
     const handleRemoveEntry = (id) => {
         setEducationEntries(educationEntries.filter(entry => entry.id !== id));
     };
 
     return (
         <div>
-            <h4>YOUR EDUCATIONAL BACKGROUND</h4>
+            <h3>Education</h3>
             <form onSubmit={handleSubmit}>
                 {/* Input fields for education details */}
                 <div>
-                    <label htmlFor="schoolName">School Name</label>
+                    <label htmlFor="schoolName">School</label>
                     <input
                         type="text"
                         name="schoolName"
@@ -83,7 +74,7 @@ export default function Education() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="schoolLocation">School Location</label>
+                    <label htmlFor="schoolLocation">Location</label>
                     <input
                         type="text"
                         name="schoolLocation"
@@ -113,34 +104,20 @@ export default function Education() {
                     />
                 </div>
                 {/* Date pickers for start and end dates */}
-                <div>
-                    <label htmlFor="startDate">Start Date</label>
-                    <DatePicker
-                        id="startDate"
-                        selected={newEntry.startDate}
-                        onChange={handleStartDateChange}
-                        dateFormat="MMM yyyy"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="endDate">End Date</label>
-                    <DatePicker
-                        id="endDate"
-                        selected={newEntry.endDate}
-                        onChange={handleEndDateChange}
-                        disabled={newEntry.isCurrent}
-                        dateFormat="MMM yyyy"
-                    />
-                    <label htmlFor="present">
-                        <input
-                            type="checkbox"
-                            id="present"
-                            checked={newEntry.isCurrent}
-                            onChange={handleCurrentStudyChange}
-                        />
-                        Present
-                    </label>
-                </div>
+                <CustomDatePicker
+                    id="startDate"
+                    label="Start Date"
+                    selectedDate={newEntry.startDate}
+                    handleDateChange={handleStartDateChange}
+                />
+                <CustomDatePicker
+                    id="endDate"
+                    label="End Date"
+                    selectedDate={newEntry.isCurrent ? '' : newEntry.endDate}
+                    handleDateChange={handleEndDateChange}
+                    disabled={newEntry.isCurrent}
+                    isEndDate={true}
+                />
                 {/* Button to add new education entries */}
                 <button type="submit">Add School</button>
             </form>
@@ -148,7 +125,7 @@ export default function Education() {
             {/* Display Education information */}
             {educationEntries.length > 0 && (
                 <div>
-                    <h4>YOUR EDUCATION HISTORY</h4>
+                    <h4>Education</h4>
                     <ul>
                         {educationEntries.map((entry) => (
                             <li key={entry.id}>
@@ -158,9 +135,8 @@ export default function Education() {
                                 <p>{entry.schoolLocation}</p>
                                 <p>{entry.degree}</p>
                                 <p>Start Date: {format(entry.startDate, 'MMM yyyy')}</p>
-                                <p>End Date: {entry.isCurrent ? 'Present' : format(new Date(entry.endDate), 'MMM yyyy')}</p>
-                                {/* Button to remove an education entry */}
-                                <button type="button" onClick={() => handleRemoveEntry(entry.id)}>Remove</button>
+                                <p>End Date: {entry.isCurrent ? 'Present' : (entry.endDate ? format(new Date(entry.endDate), 'MMM yyyy') : 'Present')}</p>
+                                <button type="submit" onClick={() => handleRemoveEntry(entry.id)}>Remove</button>
                             </li>
                         ))}
                     </ul>
