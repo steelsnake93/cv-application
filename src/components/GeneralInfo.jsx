@@ -62,7 +62,7 @@ export default function GeneralInfo() {
                         id="name"
                         value={info.name}
                         onChange={handleChange}
-                    />
+                        autoComplete='off'                    />
                     {errors.name && <p style={{ color: 'red' }}>{errors.name}</p>}
                 </div>
                 {/* Email input field */}
@@ -74,6 +74,7 @@ export default function GeneralInfo() {
                         id="email"
                         value={info.email}
                         onChange={handleChange}
+                        autoComplete='off'
                     />
                     {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
                 </div>
@@ -86,6 +87,7 @@ export default function GeneralInfo() {
                         id="phone"
                         value={info.phone}
                         onChange={handleChange}
+                        autoComplete='off'
                     />
                     {errors.phone && <p style={{ color: 'red' }}>{errors.phone}</p>}
                 </div>
@@ -98,6 +100,7 @@ export default function GeneralInfo() {
                         id="address"
                         value={info.address}
                         onChange={handleChange}
+                        autoComplete='off'
                     />
                     {errors.address && <p style={{ color: 'red' }}>{errors.address}</p>}
                 </div>
