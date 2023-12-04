@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import validator from 'validator';
 
 // Define the GeneralInfo component
@@ -51,7 +51,7 @@ export default function GeneralInfo() {
     // Component JSX
     return (
         <div>
-            <h3>YOUR PERSONAL INFO</h3>
+            <h4>YOUR PERSONAL INFO</h4>
             <form onSubmit={handleSubmit}>
                 {/* Name input field */}
                 <div>
