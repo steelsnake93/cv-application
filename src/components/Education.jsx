@@ -7,7 +7,6 @@ import { format } from 'date-fns';
 export default function Education() {
     // State to store multiple education entries
     const [educationEntries, setEducationEntries] = useState([]);
-
     // State to store data for a new entry
     const [newEntry, setNewEntry] = useState({
         id: uuidv4(),
@@ -19,45 +18,40 @@ export default function Education() {
         endDate: "",
         isCurrent: false
     });
-
+    // State to track if the user is editing an existing entry (null when adding a new entry)
+    const [editingId, setEditingId] = useState(null);
     // Function handlers for date change
     const handleStartDateChange = (date) => {
         setNewEntry({ ...newEntry, startDate: date });
     };
-
     const handleEndDateChange = (date) => {
         setNewEntry({ ...newEntry, endDate: date });
     };
-
     // Handle input changes and update the state for the new entry
     const handleInputChange = (e) => {
         setNewEntry({ ...newEntry, [e.target.name]: e.target.value });
     };
-
     // Handle form submission to add a new education entry
     const handleSubmit = (e) => {
         e.preventDefault();
-        const entryToAdd = {
-            ...newEntry,
-            endDate: newEntry.endDate === '' ? null : newEntry.endDate
-        };
-        setEducationEntries([...educationEntries, entryToAdd]);
-        setNewEntry({
-            id: uuidv4(),
-            schoolName: "",
-            schoolLocation: "",
-            degree: "",
-            major: "",
-            startDate: new Date(),
-            endDate: "",
-            isCurrent: false
-        });
+        const entry = { ...newEntry, endDate: newEntry.endDate === '' ? null : newEntry.endDate };
+        if (editingId) {
+            setEducationEntries(educationEntries.map(e => e.id === editingId ? entry : e));
+            setEditingId(null);
+        } else {
+            setEducationEntries([...educationEntries, { ...entry, id: uuidv4() }]);
+        }
+        setNewEntry({ schoolName: "", schoolLocation: "", degree: "", major: "", startDate: new Date(), endDate: "", isCurrent: false });
     };
-
     const handleRemoveEntry = (id) => {
         setEducationEntries(educationEntries.filter(entry => entry.id !== id));
     };
-
+    // Load an existing entry for editing
+    const handleEditEntry = (id) => {
+        const entry = educationEntries.find(e => e.id === id);
+        setNewEntry({ ...entry, startDate: new Date(entry.startDate), endDate: entry.endDate ? new Date(entry.endDate) : '' });
+        setEditingId(id); // Set editingId to the id of the entry being edited
+    };
     return (
         <div>
             <h3>Education</h3>
@@ -121,7 +115,6 @@ export default function Education() {
                 {/* Button to add new education entries */}
                 <button type="submit">Add School</button>
             </form>
-
             {/* Display Education information */}
             {educationEntries.length > 0 && (
                 <div>
@@ -136,7 +129,8 @@ export default function Education() {
                                 <p>{entry.degree}</p>
                                 <p>Start Date: {format(entry.startDate, 'MMM yyyy')}</p>
                                 <p>End Date: {entry.isCurrent ? 'Present' : (entry.endDate ? format(new Date(entry.endDate), 'MMM yyyy') : 'Present')}</p>
-                                <button type="submit" onClick={() => handleRemoveEntry(entry.id)}>Remove</button>
+                                <button onClick={() => handleEditEntry(entry.id)}>Edit</button>
+                                <button onClick={() => handleRemoveEntry(entry.id)}>Remove</button>
                             </li>
                         ))}
                     </ul>
