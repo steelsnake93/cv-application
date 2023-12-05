@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { InfoContext } from './InfoContext';
 import { v4 as uuidv4 } from 'uuid';
 import CustomDatePicker from "./CustomDatePicker";
 import { format } from "date-fns";
@@ -6,7 +7,7 @@ import { format } from "date-fns";
 // Define the Experience component
 export default function Experience() {
     // State to store multiple work experience entries
-    const [experienceEntries, setExperienceEntries] = useState([]);
+    const { experienceEntries, setExperienceEntries } = useContext(InfoContext);
     // State to store data for a new or currently editing entry
     const [newEntry, setNewEntry] = useState(initialEntryState());
     // State to track the ID of an entry currently being edited

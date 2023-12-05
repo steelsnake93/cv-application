@@ -1,22 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { InfoContext } from './InfoContext';
 import validator from 'validator';
 
 // Define the GeneralInfo component
 export default function GeneralInfo() {
-    // State for storing form data
-    const [info, setInfo] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        link: ''
-    });
-
+    const { info, setInfo, submittedInfo, setSubmittedInfo } = useContext(InfoContext);
     const [isEditing, setIsEditing] = useState(true);
     // State for storing form errors
     const [errors, setErrors] = useState({});
-    // State for storing submitted information
-    const [submittedInfo, setSubmittedInfo] = useState(null);
     // Handle input changes and update the state
     const handleChange = (e) => {
         setInfo({
@@ -39,6 +30,7 @@ export default function GeneralInfo() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
+            console.log(info);
             setSubmittedInfo(info);
             setIsEditing(false);
         }

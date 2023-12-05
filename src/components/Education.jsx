@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { InfoContext } from './InfoContext';
 import { useState } from "react";
 import CustomDatePicker from "./CustomDatePicker";
 import { v4 as uuidv4 } from 'uuid';
@@ -5,8 +7,7 @@ import { format } from 'date-fns';
 
 // Education Component
 export default function Education() {
-    // State to store multiple education entries
-    const [educationEntries, setEducationEntries] = useState([]);
+    const { educationEntries, setEducationEntries } = useContext(InfoContext);
     // State to store data for a new entry
     const [newEntry, setNewEntry] = useState({
         id: uuidv4(),
