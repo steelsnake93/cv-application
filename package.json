@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@phntms/css-components": "^0.4.0",
     "date-fns": "^2.30.0",
+    "normalize.css": "^8.0.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-datepicker": "^4.24.0",
     "react-dom": "^18.2.0",
+    "styled-components": "^6.1.1",
     "uuid": "^9.0.1",
     "validator": "^13.11.0"
   },

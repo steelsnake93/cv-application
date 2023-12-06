@@ -9,20 +9,20 @@ export default function App() {
 
   return (
     <InfoProvider>
-      <div className="App">
-        <div className='header'>
+      <div className="app-container">
+        <header className='header'>
           <h1>ResumeRanger</h1>
-        </div>
-        <div className='main'>
-          <div>
+        </header>
+        <main className='main-content'>
+          <section className='editor-section'>
             <GeneralInfo />
             <Education />
             <Experience />
-          </div>
-          <div>
+          </section>
+          <section className='preview-section'>
             <DisplayData />
-          </div>
-        </div>
+          </section>
+        </main>
       </div>
     </InfoProvider>
   )
