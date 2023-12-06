@@ -1,9 +1,12 @@
 import { useState, useContext } from 'react';
 import { InfoContext } from './InfoContext';
 import validator from 'validator';
+import { useButton } from "../Button/Button";
+import '../styles/GeneralInfo.css';
 
 // Define the GeneralInfo component
 export default function GeneralInfo() {
+    const Button = useButton();
     const { info, setInfo, submittedInfo, setSubmittedInfo } = useContext(InfoContext);
     const [isEditing, setIsEditing] = useState(true);
     // State for storing form errors
@@ -44,11 +47,13 @@ export default function GeneralInfo() {
         <div>
             <h3>Personal Details</h3>
             {isEditing ? (
-                <form onSubmit={handleSubmit}>
+                <form id='generaInfoForm' onSubmit={handleSubmit}>
                     {/* Name input field */}
-                    <div>
-                        <label htmlFor="name">Full Name:</label>
+                    <div className='form-fields'>
+                    <div className='form-field'>
+                        <label className='label' htmlFor="name">Full Name:</label>
                         <input
+                            className="input"
                             type="text"
                             name="name"
                             id="name"
@@ -58,9 +63,10 @@ export default function GeneralInfo() {
                         {errors.name && <p style={{ color: 'red' }}>{errors.name}</p>}
                     </div>
                     {/* Email input field */}
-                    <div>
-                        <label htmlFor="email">Email:</label>
+                    <div className='form-field'>
+                        <label className='label' htmlFor="email">Email:</label>
                         <input
+                            className="input"
                             type="email"
                             name="email"
                             id="email"
@@ -70,9 +76,10 @@ export default function GeneralInfo() {
                         {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
                     </div>
                     {/* Phone number input field */}
-                    <div>
-                        <label htmlFor="phone">Phone Number:</label>
+                    <div className='form-field'>
+                        <label className='label' htmlFor="phone">Phone Number:</label>
                         <input
+                            className="input"
                             type="tel"
                             name="phone"
                             id="phone"
@@ -82,9 +89,10 @@ export default function GeneralInfo() {
                         {errors.phone && <p style={{ color: 'red' }}>{errors.phone}</p>}
                     </div>
                     {/* Address input field */}
-                    <div>
-                        <label htmlFor="address">Location:</label>
+                    <div className='form-field'>
+                        <label className='label' htmlFor="address">Location:</label>
                         <input
+                            className="input"
                             type="text"
                             name="address"
                             id="address"
@@ -94,9 +102,10 @@ export default function GeneralInfo() {
                         {errors.address && <p style={{ color: 'red' }}>{errors.address}</p>}
                     </div>
                     {/* Link input field */}
-                    <div>
-                        <label htmlFor="link">Link:</label>
+                    <div className='form-field'>
+                        <label className='label' htmlFor="link">Link:</label>
                         <input
+                            className="input"
                             type="text"
                             name="link"
                             id="link"
@@ -105,7 +114,8 @@ export default function GeneralInfo() {
                         />
                         {errors.link && <p style={{ color: 'red' }}>{errors.link}</p>}
                     </div>
-                    <button type="submit">Save</button>
+                    </div>
+                        <Button id='generaInfoForm' secondary type="submit">Save</Button>
                 </form>
             ) : (
                 /* Display submitted information */
@@ -121,7 +131,9 @@ export default function GeneralInfo() {
                             {submittedInfo.link}
                         </a>
                     </p>
-                    <button onClick={handleEdit}>Edit</button>
+                    {/* <button onClick={handleEdit}>Edit</button> */}
+
+                    <Button primary onClick={handleEdit}>Edit</Button>
                 </div>
             )}
         </div>
