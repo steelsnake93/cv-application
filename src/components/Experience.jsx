@@ -1,142 +1,122 @@
-import { useState, useContext } from "react";
-import { InfoContext } from './InfoContext';
-import { v4 as uuidv4 } from 'uuid';
-import CustomDatePicker from "./CustomDatePicker";
-import { format } from "date-fns";
+import { useState } from 'react';
+import { Box, TextField, Button, IconButton } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-// Define the Experience component
-export default function Experience() {
-    // State to store multiple work experience entries
-    const { experienceEntries, setExperienceEntries } = useContext(InfoContext);
-    // State to store data for a new or currently editing entry
-    const [newEntry, setNewEntry] = useState(initialEntryState());
-    // State to track the ID of an entry currently being edited
-    const [editingId, setEditingId] = useState(null);
-    // Initial state setup for a new experience entry
-    function initialEntryState() {
-        return {
-            id: uuidv4(),
-            companyName: "",
-            jobTitle: "",
-            jobLocation: "",
-            startDate: new Date(),
-            endDate: "",
-            isCurrent: false,
-            jobResponsibilities: ""
+export const Experience = () => {
+    const [jobs, setJobs] = useState([]);
+
+    const handleAddJob = () => {
+        const newJob = {
+            companyName: '',
+            jobTitle: '',
+            jobLocation: '',
+            startDate: '',
+            endDate: '',
+            responsibilities: ['']
         };
-    }
-    // Function to handle changes in start date
-    const handleStartDateChange = (date) => {
-        setNewEntry({ ...newEntry, startDate: date });
+        setJobs([...jobs, newJob]);
     };
-    // Function to handle changes in end date
-    const handleEndDateChange = (date) => {
-        setNewEntry({ ...newEntry, endDate: date });
+
+    const handleRemoveJob = (index) => {
+        const updatedJobs = jobs.filter((_, i) => i !== index);
+        setJobs(updatedJobs);
     };
-    // Function to handle changes in input fields
-    const handleInputChange = (e) => {
-        setNewEntry({ ...newEntry, [e.target.name]: e.target.value });
+
+    const handleJobChange = (jobIndex, event) => {
+        const updatedJobs = [...jobs];
+        updatedJobs[jobIndex][event.target.name] = event.target.value;
+        setJobs(updatedJobs);
     };
-    // Function to handle form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const entry = { ...newEntry, endDate: newEntry.endDate === '' ? null : newEntry.endDate };
-        if (editingId) {
-            // Update an existing entry
-            setExperienceEntries(experienceEntries.map(e => e.id === editingId ? entry : e));
-            setEditingId(null);
-        } else {
-            // Add a new entry
-            setExperienceEntries([...experienceEntries, entry]);
-        }
-        setNewEntry(initialEntryState());
+
+    const handleAddResponsibility = (jobIndex) => {
+        const updatedJobs = [...jobs];
+        updatedJobs[jobIndex].responsibilities.push('');
+        setJobs(updatedJobs);
     };
-    // Function to remove a specific work experience entry
-    const handleRemoveEntry = (id) => {
-        setExperienceEntries(experienceEntries.filter(entry => entry.id !== id));
+
+    const handleRemoveResponsibility = (jobIndex, respIndex) => {
+        const updatedJobs = [...jobs];
+        updatedJobs[jobIndex].responsibilities = updatedJobs[jobIndex].responsibilities.filter((_, i) => i !== respIndex);
+        setJobs(updatedJobs);
     };
+
+    const handleResponsibilityChange = (jobIndex, respIndex, event) => {
+        const updatedJobs = [...jobs];
+        updatedJobs[jobIndex].responsibilities[respIndex] = event.target.value;
+        setJobs(updatedJobs);
+    };
+
     return (
-        <div>
-            <h3>Work Experience</h3>
-            <form onSubmit={handleSubmit}>
-                {/* Input fields for job experience details */}
-                <div>
-                    <label htmlFor="companyName">Company Name</label>
-                    <input
-                        type="text"
+        <Box sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+            <h1>Practical Experience</h1>
+            {jobs.map((job, jobIndex) => (
+                <div key={jobIndex}>
+                    <TextField
+                        label="Company Name"
                         name="companyName"
-                        id="companyName"
-                        value={newEntry.companyName}
-                        onChange={handleInputChange}
+                        value={job.companyName}
+                        onChange={(e) => handleJobChange(jobIndex, e)}
+                        variant="outlined"
                     />
-                </div>
-                <div>
-                    <label htmlFor="jobTitle">Job Title</label>
-                    <input
-                        type="text"
+                    <TextField
+                        label="Job Title"
                         name="jobTitle"
-                        id="jobTitle"
-                        value={newEntry.jobTitle}
-                        onChange={handleInputChange}
+                        value={job.jobTitle}
+                        onChange={(e) => handleJobChange(jobIndex, e)}
+                        variant="outlined"
                     />
-                </div>
-                <div>
-                    <label htmlFor="jobLocation">Job Location</label>
-                    <input
-                        type="text"
+                    <TextField
+                        label="Job Location"
                         name="jobLocation"
-                        id="jobLocation"
-                        value={newEntry.jobLocation}
-                        onChange={handleInputChange}
+                        value={job.jobLocation}
+                        onChange={(e) => handleJobChange(jobIndex, e)}
+                        variant="outlined"
                     />
-                </div>
-                {/* Date pickers for start and end dates */}
-                <CustomDatePicker
-                    id="startDate"
-                    label="Start Date"
-                    selectedDate={newEntry.startDate}
-                    handleDateChange={handleStartDateChange}
-                />
-                <CustomDatePicker
-                    id="endDate"
-                    label="End Date"
-                    selectedDate={newEntry.isCurrent ? '' : newEntry.endDate}
-                    handleDateChange={handleEndDateChange}
-                    disabled={newEntry.isCurrent}
-                    isEndDate={true}
-                />
-                <div>
-                    <label htmlFor="jobResponsibilities">Responsibilities</label>
-                    <input
-                        type="text"
-                        name="jobResponsibilities"
-                        id="jobResponsibilities"
-                        value={newEntry.jobResponsibilities}
-                        onChange={handleInputChange}
+                    <TextField
+                        label="Start Date"
+                        name="startDate"
+                        type="date"
+                        InputLabelProps={{ shrink: true }}
+                        value={job.startDate}
+                        onChange={(e) => handleJobChange(jobIndex, e)}
+                        variant="outlined"
                     />
+                    <TextField
+                        label="End Date"
+                        name="endDate"
+                        type="date"
+                        InputLabelProps={{ shrink: true }}
+                        value={job.endDate}
+                        onChange={(e) => handleJobChange(jobIndex, e)}
+                        variant="outlined"
+                    />
+                    <Box>
+                        {job.responsibilities.map((resp, respIndex) => (
+                            <div key={respIndex}>
+                                <TextField
+                                    label="Job Responsibility"
+                                    value={resp}
+                                    onChange={(e) => handleResponsibilityChange(jobIndex, respIndex, e)}
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                                <IconButton onClick={() => handleRemoveResponsibility(jobIndex, respIndex)} disabled={job.responsibilities.length === 1}>
+                                    <RemoveCircleOutlineIcon />
+                                </IconButton>
+                            </div>
+                        ))}
+                        <Button startIcon={<AddCircleOutlineIcon />} onClick={() => handleAddResponsibility(jobIndex)}>
+                            Add Responsibility
+                        </Button>
+                    </Box>
+                    <IconButton aria-label="delete" onClick={() => handleRemoveJob(jobIndex)}>
+                        <DeleteIcon />
+                    </IconButton>
                 </div>
-                {/* Button to add new job experience entries */}
-                <button type="submit">Add Job</button>
-            </form>
-            {/* Display list of work experience entries */}
-            {experienceEntries.length > 0 && (
-                <div>
-                    <h4>Experince</h4>
-                    <ul>
-                        {experienceEntries.map((entry) =>
-                            <li key={entry.id}>
-                                <p>{entry.companyName}</p>
-                                <p>{entry.jobTitle}</p>
-                                <p>{entry.jobLocation}</p>
-                                <p>Start Date: {format(entry.startDate, 'MMM yyyy')}</p>
-                                <p>End Date: {entry.isCurrent ? 'Present' : (entry.endDate ? format(new Date(entry.endDate), 'MMM yyyy') : 'Present')}</p>
-                                <p>{entry.jobResponsibilities}</p>
-                                <button type="submit" onClick={() => handleRemoveEntry(entry.id)}>Remove</button>
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            )}
-        </div>
+            ))}
+            <Button variant="contained" onClick={handleAddJob}>Add Job</Button>
+        </Box>
     );
-}
+};
