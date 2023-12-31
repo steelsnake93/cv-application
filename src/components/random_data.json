@@ -1,0 +1,50 @@
+{
+  "generalInfo": {
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "johndoe@email.com",
+    "phoneNumber": "+91 9876543210",
+    "location": "Bengaluru",
+    "websiteLink": "https://www.mywebsite.co",
+    "title": "Frontend Developer"
+  },
+  "experience": [
+    {
+      "companyName": "Company 1",
+      "position": "Senior Software Developer",
+      "startDate": "04/01/2021",
+      "endDate": "",
+      "jobLocation": "London",
+      "description": "Define structure and components for projects, ensuring reusability. Maintain high code quality, review code, suggest improvements. Interact with designers, ensure design translation to functionality. E-commerce maintenance with Fastcommerce.",
+      "responsibilities": "Implemented scalable and maintainable CSS architecture using SASS, improving site's maintainability by 25%"
+    },
+    {
+      "companyName": "Company 2",
+      "position": "Software Developer",
+      "startDate": "12/10/2015",
+      "endDate": "12/01/2017",
+      "jobLocation": "London",
+      "description": "Develop web applications (Sharepoint, Drupal 8, Episerver). Lead team of 10 front end developers. Manage tasks, update Project Manager and IT Leads on progress. Ensure code and features meet requirements.",
+      "responsibilities": "Implemented scalable and maintainable CSS architecture using SASS, improving site's maintainability by 25%"
+    },
+    {
+      "companyName": "Company 3",
+      "position": "Trainee Developer",
+      "startDate": "09/10/2011",
+      "endDate": "01/01/2015",
+      "jobLocation": "London",
+      "description": "Design user interfaces and experiences for digital platforms. Wordpress development (themes, plugins, training). E-commerce development with Magento. VPS configuration and optimization (Apache & Nginx).",
+      "responsibilities": "Implemented scalable and maintainable CSS architecture using SASS, improving site's maintainability by 25%"
+    }
+  ],
+  "education": [
+    {
+      "schoolName": "",
+      "degree": "XIV",
+      "major": "B.Tech, Masters in Cloud Technology",
+      "institution": "London",
+      "startDate": "09/01/2010",
+      "endDate": "09/01/2014"
+    }
+  ]
+}

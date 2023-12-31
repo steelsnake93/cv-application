@@ -1,70 +1,62 @@
-import { useState } from "react";
-import { Box, TextField } from "@mui/material";
+// /src//components/GeneralInfo.jsx
+import { useEffect, useState } from "react";
+import { Box, Grid, TextField, Typography } from "@mui/material";
 
-export const GeneralInfo = () => {
-    const [info, setInfo] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        portfolioLink: '',
-        address: ''
-    });
+export const GeneralInfo = ({ onChange }) => {
+  const [info, setInfo] = useState({
+    firstName: "",
+    lastName: "",
+    title: "",
+    location: "",
+    email: "",
+    phoneNumber: "",
+    webSite: "",
+    summary: ""
+  });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        const updatedInfo = { ...info, [name]: value };
-        setInfo(updatedInfo);
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const updatedInfo = { ...info, [name]: value };
+    setInfo(updatedInfo);
+  };
+  useEffect(() => {
+    if (typeof onChange === "function") {
+      onChange(info);
+    }
+  }, [info, onChange]);
 
-    return (
-        <Box sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
-            <h1>General Information</h1>
+  return (
+    <Box sx={{ flexGrow: 1, m: 2 }}>
+      <Typography variant="h6" component="div" mb={1} fontWeight={600}>
+        Personal Details
+      </Typography>
+      <Grid container spacing={2}>
+        {Object.keys(info).map((key) => (
+          <Grid item xs={12} sm={6} md={6} key={key}>
             <TextField
-                name="firstName"
-                label="First Name"
-                value={info.firstName}
-                onChange={handleInputChange}
-                variant="outlined"
+              size="small"
+              fullWidth
+              name={key}
+              label={
+                key.charAt(0).toUpperCase() +
+                key.slice(1).replace(/([A-Z])/g, " $1")
+              } // Formatting the label
+              value={info[key]}
+              onChange={handleInputChange}
+              variant="outlined"
+              type={
+                key === "email"
+                  ? "email"
+                  : key === "phoneNumber"
+                  ? "tel"
+                  : key === "webSite"
+                  ? "url"
+                  : "text"
+              }
             />
-            <TextField
-                name="lastName"
-                label="Last Name"
-                value={info.lastName}
-                onChange={handleInputChange}
-                variant="outlined"
-            />
-            <TextField
-                label="Email"
-                type="email"
-                name="email"
-                value={info.email}
-                onChange={handleInputChange}
-                variant="outlined"
-            />
-            <TextField
-                label="Phone Number"
-                type="tel"
-                name="phoneNumber"
-                value={info.phoneNumber}
-                onChange={handleInputChange}
-                variant="outlined"
-            />
-            <TextField
-                label="Address"
-                name="address"
-                value={info.address}
-                onChange={handleInputChange}
-                variant="outlined"
-            />
-            <TextField
-                label="Website"
-                name="portfolioLink"
-                value={info.portfolioLink}
-                type="url"
-                onChange={handleInputChange}
-                variant="outlined"
-            />
-        </Box>
-    );
-}
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};

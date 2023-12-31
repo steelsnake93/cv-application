@@ -1,64 +1,146 @@
-import { useContext } from 'react';
-import { InfoContext } from './InfoContext';
-import { format } from 'date-fns';
-import '../styles/DisplayData.css';
+// /src//components/DisplayData.jsx
+import { Paper, Typography, Box, styled, Grid } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { Phone } from "@mui/icons-material";
+import LinkIcon from "@mui/icons-material/Link";
 
-const DisplayData = () => {
-    // Accessing shared context data
-    const { submittedInfo, educationEntries, experienceEntries } = useContext(InfoContext);
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  color: theme.palette.text.secondary,
+  margin: theme.spacing(2),
+  backgroundColor: "#f5f5f5",
+}));
+const StyledHeader = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
+  padding: theme.spacing(5),
+  textAlign: "left",
+}));
 
-    if (!submittedInfo) {
-        return <div>No data submitted yet.</div>;
-    }
+const StyledSection = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(5),
+}));
 
-    return (
-        <div className='page'>
-            <div className='resume-contact-section'>
-                <h1 className='name-info'><strong></strong> {submittedInfo.name}</h1>
-                <div className='contact-info'>
-                    <p className='contact-info-phone'><strong></strong> {submittedInfo.phone}</p>
-                    <p className='contact-info-email'><strong></strong> {submittedInfo.email}</p>
-                    <p className='contact-info-address'><strong></strong> {submittedInfo.address}</p>
-                    <p className='contact-info-link'><strong></strong> <a href={submittedInfo.link} target="_blank" rel="noopener noreferrer">{submittedInfo.link}</a></p>
-                </div>
-            </div>
-            <hr />
-            <div className='education-contact-section'>
-                <h2>Education</h2>
-                {educationEntries.length > 0 && (
-                    <ul>
-                        {educationEntries.map((entry) => (
-                            <li key={entry.id}>
-                                <p><strong>School:</strong> {entry.schoolName}</p>
-                                <p><strong>Major:</strong> {entry.major}</p>
-                                <p><strong>Location:</strong> {entry.schoolLocation}</p>
-                                <p><strong>Degree:</strong> {entry.degree}</p>
-                                <p><strong>Start Date:</strong> {format(entry.startDate, 'MMM yyyy')}</p>
-                                <p><strong>End Date:</strong> {entry.isCurrent ? 'Present' : (entry.endDate ? format(new Date(entry.endDate), 'MMM yyyy') : 'Present')}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-            <div className='experience-contact-section'>
-                <h2>Experience</h2>
-                {experienceEntries.length > 0 && (
-                    <ul>
-                        {experienceEntries.map((entry) => (
-                            <li key={entry.id}>                            <p><strong>Company Name:</strong> {entry.companyName}</p>
-                                <p><strong>Job Title:</strong> {entry.jobTitle}</p>
-                                <p><strong>Job Location:</strong> {entry.jobLocation}</p>
-                                <p><strong>Start Date:</strong> {format(entry.startDate, 'MMM yyyy')}</p>
-                                <p><strong>End Date:</strong> {entry.isCurrent ? 'Present' : (entry.endDate ? format(new Date(entry.endDate), 'MMM yyyy') : 'Present')}</p>
-                                <p><strong>Responsibilities:</strong> {entry.jobResponsibilities}</p>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+const StyledSectionTitle = styled(Typography)({
+  fontWeight: "bold",
+  textDecoration: "underline",
+});
+const StyledListItem = styled(Typography)(({ theme }) => ({
+  paddingLeft: theme.spacing(2),
+}));
+const StyledContactItem = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+});
 
-        </div>
-    );
+const formatDate = (dateString) => {
+  if (!dateString) return "present";
+  const date = new Date(dateString);
+  const month = date.toLocaleString("default", { month: "2-digit" });
+  const year = date.getFullYear();
+  return `${month}/${year}`;
 };
+export const DisplayData = ({ formData, printRef }) => {
+  const { generalInfo, education, experience } = formData;
+  if (!formData) {
+    return <div>No data submitted yet.</div>;
+  }
+  return (
+    <StyledPaper ref={printRef}>
+      {generalInfo && (
+        <StyledHeader>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            {formData.generalInfo.firstName} {formData.generalInfo.lastName}
+            <Typography variant="h6" sx={{ paddingBottom: "10px" }}>
+              {formData.generalInfo.title}
+            </Typography>
+          </Typography>
+          <StyledContactItem>
+            <EmailIcon fontSize="small" /> {formData.generalInfo.email}
+            <Phone fontSize="small" /> {formData.generalInfo.phoneNumber}
+            <LocationOnIcon fontSize="small" /> {generalInfo.location}
+            <LinkIcon fontSize="small" /> {generalInfo.websiteLink}
+          </StyledContactItem>
+        </StyledHeader>
+      )}
 
-export default DisplayData;
+      {experience && experience.length > 0 && (
+        <StyledSection>
+          <StyledSectionTitle variant="h6">Experience</StyledSectionTitle>
+          {experience.map((job, index) => (
+            <Box key={index} sx={{ my: 2 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="body1">
+                    <strong> {job.position} </strong>
+                  </Typography>
+                  <Typography variant="body1">{job.companyName}</Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="body1" sx={{ textAlign: "right" }}>
+                    {formatDate(job.startDate)} - {formatDate(job.endDate)}
+                  </Typography>
+                  <Typography variant="body1" sx={{ textAlign: "right" }}>
+                    {" "}
+                    {job.jobLocation}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Typography variant="body1" sx={{ mt: 1 }}>
+                {job.description}
+              </Typography>
+              {job.responsibilities && Array.isArray(job.responsibilities) ? (
+                <ul>
+                  <StyledListItem>
+                    {job.responsibilities.map((resp, idx) => (
+                      <li key={idx}>{resp}</li>
+                    ))}
+                  </StyledListItem>
+                </ul>
+              ) : (
+                <ul>
+                  <StyledListItem>
+                    <li>{job.responsibilities}</li>
+                  </StyledListItem>
+                </ul>
+              )}
+            </Box>
+          ))}
+        </StyledSection>
+      )}
+
+      {education && education.length > 0 && (
+        <StyledSection>
+          <StyledSectionTitle variant="h6">Education</StyledSectionTitle>
+          {education.map((school, index) => (
+            <Box key={index} sx={{ my: 2 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="body1">
+                    <strong>{school.schoolName}</strong>
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>
+                      {school.degree} {school.major}
+                    </strong>
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Typography variant="body1" sx={{ textAlign: "right" }}>
+                    {formatDate(school.startDate)} -{" "}
+                    {formatDate(school.endDate)}
+                  </Typography>
+                  <Typography variant="body1" sx={{ textAlign: "right" }}>
+                    {school.institution}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
+        </StyledSection>
+      )}
+    </StyledPaper>
+  );
+};
